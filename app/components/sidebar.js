@@ -1,5 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {List, ListItem, makeSelectable} from 'material-ui/List';
+import DashboardIcon from 'material-ui/svg-icons/action/dashboard'
+import AccountIcon from 'material-ui/svg-icons/action/euro-symbol'
 
 let SelectableList = makeSelectable(List);
 
@@ -40,14 +42,8 @@ SelectableList = wrapState(SelectableList);
 
 const ListExampleSelectable = () => (
     <SelectableList defaultValue={1} style={{width: 200, bottom: 0, borderRight: 'solid 1px #d9d9d9', marginTop: 75, minHeight: 700}}>
-      <ListItem
-        value={1}
-        primaryText="Dashboard"
-      />
-      <ListItem
-        value={2}
-        primaryText="Accounts"
-      />
+      <ListItem value={1} primaryText="Dashboard" leftAvatar={<DashboardIcon />} />
+      <ListItem value={2} primaryText="Accounts" leftAvatar={<AccountIcon />}/>
     </SelectableList>
 );
 
