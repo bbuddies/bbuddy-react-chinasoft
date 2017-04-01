@@ -12,6 +12,8 @@ import Body from '../components/body'
 import Footer from '../components/footer'
 import * as CommonActions from '../actions/common'
 
+import '../../sass/page.scss'
+
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Page extends React.Component {
   componentDidMount() {
@@ -30,11 +32,15 @@ export default class Page extends React.Component {
         <MuiThemeProvider muiTheme={muiTheme}>
           <div>
             <Header />
-            <Sidebar />
-            <Body>
-            {this.props.children}
-            </Body>
-            <Footer />
+            <div className="main">
+              <Sidebar className="sidebar" />
+              <div className="body">
+                <Body>
+                {this.props.children}
+                </Body>
+                <Footer />
+              </div>
+            </div>
             <Notification />
             <Indicator />
           </div>

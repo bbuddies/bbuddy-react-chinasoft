@@ -5,9 +5,7 @@ import {AppContainer} from 'react-hot-loader'
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Root from './containers/Root';
 import configureStore from './store/configureStore';
-import trackError from './utils/trackError'
 
-trackError();
 injectTapEventPlugin();
 const store = configureStore()
 const render = Component => {

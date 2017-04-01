@@ -1,1 +1,0 @@
-export default (data) => console.log('Track event', data)

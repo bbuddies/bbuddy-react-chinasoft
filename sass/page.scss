@@ -1,15 +1,34 @@
-$screen-sm-min: 990px;
-$screen-md-min: 1152px;
-$screen-lg-min: 1366px;
+@import "~susy/sass/_susy";
 
-$screen-xs-max: ($screen-sm-min - 1);
-$screen-sm-max: ($screen-md-min - 1);
-$screen-md-max: ($screen-lg-min - 1);
+$susy: (
+  /* Tells Susy to use 12 columns */
+  columns: 12,
+  /* Tells Susy that the container has a max-width of 1120px */
+  // container: 1120px,
+  /* Tells Susy to use border-box */
+  global-box-sizing: border-box
+);
 
-.hidden-on-mobile {
-  @media (max-width: $screen-xs-max) {
-    display: none;
-  }
+/* Makes border-box properties */
+@include border-box-sizing;
+
+.main {
+  @include container;
+}
+
+.body {
+  @include span(10);
+  min-height: 800px;
+  position: relative;
+}
+
+.sidebar {
+  @include span(2);
+  width: 200px;
+  bottom: 0;
+  border-right: solid 1px #d9d9d9;
+  margin-top: 75px;
+  min-height: 700px;
 }
 
 .text-center {
@@ -17,11 +36,13 @@ $screen-md-max: ($screen-lg-min - 1);
 }
 
 #footer-container {
-  padding-top: 15px;
+  padding-top: 30px;
+  width: 100%;
+  position: absolute;
   bottom: 0;
 }
 
-.richtext{
+.richtext {
   iframe, img, object {
     max-width: 100%;
   }
