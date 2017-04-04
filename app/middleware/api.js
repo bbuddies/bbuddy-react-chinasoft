@@ -5,6 +5,7 @@ import parse from 'parse-link-header'
 import 'isomorphic-fetch'
 import values from 'lodash/values'
 import * as CommonConstants from '../constants/common'
+import * as AuthenticationConstants from '../constants/authentication'
 import config from '../config'
 
 function getNextPageUrl(response) {
@@ -20,11 +21,15 @@ function getNextPageUrl(response) {
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
-function callApi(endpoint, method, data, schema) {
+function callApi(endpoint, method, data, schema, token) {
   var fullUrl = (endpoint.indexOf(config.apiUrl) === -1) ? config.apiUrl + endpoint : endpoint
   const options = {
     headers: {
-      'Accept': 'application/vnd.yihuode.v1',
+      'client': token.client,
+      'access-token': token.accessToken,
+      'uid': token.uid,
+      'expiry': token.expiry,
+      'token-type': token.type,
       'Content-Type': 'application/json'
     },
     method: method,
@@ -39,17 +44,25 @@ function callApi(endpoint, method, data, schema) {
   }
 
   return fetch(fullUrl, options)
-    .then(response =>
-      response.json().then(json => ({ json, response }))
-    ).then(({ json, response }) => {
+    .then(response => response.json().then(json => ({ json, response })))
+    .then(({ json, response }) => {
+      let token = {
+        accessToken: response.headers.get('access-token'),
+        client: response.headers.get('client'),
+        expiry: response.headers.get('expiry'),
+        type: response.headers.get('token-type'),
+        uid: response.headers.get('uid'),
+      }
+
       if (!response.ok) {
-        return Promise.reject(json)
+        return Promise.reject({data: json, token})
       }
 
       const camelizedJson = camelizeKeys(json)
       const nextPageUrl = getNextPageUrl(response)
 
-      return schema ? Object.assign({}, normalize(camelizedJson, schema), {nextPageUrl}) : camelizedJson
+      let data = schema ? Object.assign({}, normalize(camelizedJson, schema), {nextPageUrl}) : camelizedJson;
+      return {data, token}
     })
 }
 
@@ -65,7 +78,7 @@ export default store => next => action => {
   }
 
   let { endpoint } = callAPI
-  const { schema, types, method, data, success } = callAPI
+  const { schema, types, method, data } = callAPI
 
   if (typeof endpoint === 'function') {
     endpoint = endpoint(store.getState())
@@ -94,19 +107,21 @@ export default store => next => action => {
   next(actionWith({ type: requestType }))
   next({type: CommonConstants.SHOW_INDICATOR})
 
-  return callApi(endpoint, method, data, schema).then(
-    response => {
+  return callApi(endpoint, method, data, schema, store.getState().authentication.token).then(
+    ({data, token}) => {
+      next({type: AuthenticationConstants.UPDATE_TOKEN, payload: {token}})
       next({type: CommonConstants.HIDE_INDICATOR})
       return next(actionWith({
-        response,
+        data,
         type: successType
       }))
     },
-    error => {
+    ({data, token}) => {
+      next({type: AuthenticationConstants.UPDATE_TOKEN, payload: {token}})
       next({type: CommonConstants.HIDE_INDICATOR})
       return next(actionWith({
         type: failureType,
-        error: values(error).join(', ') || 'Something bad happened'
+        error: values(data).join(', ') || 'Something bad happened'
       }))
     }
   )

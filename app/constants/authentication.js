@@ -1,3 +1,4 @@
 export const SIGN_IN_REQUEST = 'SIGN_IN_REQUEST'
 export const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS'
+export const UPDATE_TOKEN = 'UPDATE_TOKEN'
 export const SIGN_IN_FAILURE = 'SIGN_IN_FAILURE'
