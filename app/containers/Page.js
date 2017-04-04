@@ -1,7 +1,6 @@
 import React from 'react';
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import {AppCanvas, Utils} from 'material-ui'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import EventListener from 'react-event-listener'
 import Notification from '../containers/Notification'

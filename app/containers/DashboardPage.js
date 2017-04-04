@@ -5,7 +5,7 @@ export default class DashboardPage extends React.Component {
     return (
       <div>
         <h1>
-          粉丝营销的神秘武器
+          Dashboard
         </h1>
       </div>
     )

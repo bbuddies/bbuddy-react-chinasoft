@@ -39,7 +39,7 @@ module.exports = function (dev) {
     output: {
       path: path.join(__dirname, 'dist'),
       filename: dev ? '[name].js' : '[name].[hash].js',
-      publicPath: dev ? '/' : 'http://cdn.com/'
+      publicPath: dev ? '/' : '/'
     },
     plugins: [
       new webpack.optimize.CommonsChunkPlugin({name: 'vendor', filename: dev ? 'vendor.js' : 'vendor.[hash].js'}),
@@ -72,14 +72,16 @@ module.exports = function (dev) {
     config.plugins.push(new webpack.HotModuleReplacementPlugin())
     config.plugins.push(new webpack.NamedModulesPlugin())
   } else {
-    config.plugins.concat(
+    config.plugins.push(
       new webpack.DefinePlugin({
         "process.env": {
           // This has effect on the react lib size
           "NODE_ENV": JSON.stringify("production")
         }
-      }),
-      new webpack.optimize.DedupePlugin(),
+      })
+    )
+    config.plugins.push(new webpack.optimize.DedupePlugin())
+    config.plugins.push(
       new webpack.optimize.UglifyJsPlugin({
         compress: {
           warnings: false
