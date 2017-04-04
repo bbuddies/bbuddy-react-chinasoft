@@ -7,7 +7,7 @@ import history from '../history'
 
 const middleware = routerMiddleware(history)
 
-export default function configureStore(routes, initialState) {
+export default function configureStore(initialState) {
   const finalCreateStore = compose(
     applyMiddleware(thunk, api),
     applyMiddleware(middleware),
