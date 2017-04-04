@@ -4,11 +4,15 @@ import thunk from 'redux-thunk'
 import api from '../middleware/api'
 import createLogger from 'redux-logger'
 import rootReducer from '../reducers'
+import {routerMiddleware} from 'react-router-redux'
+import history from '../history'
 
+const middleware = routerMiddleware(history)
 
 export default function configureStore(routes, initialState) {
   const finalCreateStore = compose(
     applyMiddleware(thunk, api),
+    applyMiddleware(middleware),
     applyMiddleware(createLogger()),
     DevTools.instrument()
   )(createStore)

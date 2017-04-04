@@ -33,7 +33,6 @@ gulp.task("build", function (callback) {
 });
 
 gulp.task("server", function (callback) {
-  console.log(webpackConfig(dev).plugins)
     new WebpackDevServer(webpack(webpackConfig(dev)))
         .listen(8100, "localhost", function (err) {
             if (err) throw new gutil.PluginError("webpack-dev-server", err);
