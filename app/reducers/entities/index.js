@@ -1,9 +1,9 @@
 import merge from 'lodash/merge'
-const initialState = { brands: {}, activities: {}, courses: {}, articles: {}, promotions: {} }
+const initialState = { accounts: {} }
 
 export default function entities(state = initialState, action) {
-  if (action.response && action.response.entities) {
-    return merge({}, state, action.response.entities)
+  if (action.data && action.data.entities) {
+    return merge({}, state, action.data.entities)
   }
 
   return state
