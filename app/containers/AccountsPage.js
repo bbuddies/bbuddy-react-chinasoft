@@ -3,7 +3,8 @@ import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import {Card, CardTitle, CardText, CardActions, RaisedButton, Table, TableHeader, TableBody, TableRow, TableHeaderColumn, TableRowColumn} from 'material-ui'
 import * as AccountActions from '../actions/account'
-
+import {routerActions} from 'react-router-redux'
+import merge from 'lodash/merge'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class AccountsPage extends React.Component {
@@ -14,7 +15,7 @@ export default class AccountsPage extends React.Component {
     this.props.loadAccounts()
   }
   add(){
-
+    this.props.push('/accounts/add')
   }
   render() {
     let {accounts} = this.props
@@ -57,5 +58,5 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(AccountActions, dispatch)
+  return bindActionCreators(merge({}, AccountActions, routerActions), dispatch)
 }
