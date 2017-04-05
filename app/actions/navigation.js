@@ -1,6 +1,6 @@
 import { goBack, push} from 'react-router-redux';
 
-export function goToBack(){
+export function goBack(){
   return (dispatch, getState) => {
     dispatch(goBack())
   }
