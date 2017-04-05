@@ -7,7 +7,20 @@ import Root from './containers/Root';
 import configureStore from './store/configureStore';
 
 injectTapEventPlugin();
-const store = configureStore()
+
+let loadAuthentication = () => {
+  try {
+    const serializedState = localStorage.getItem('auth');
+    if (serializedState === null) {
+      return {};
+    }
+    return JSON.parse(serializedState);
+  } catch (err) {
+    return {};
+  }
+}
+
+const store = configureStore({authentication: loadAuthentication()})
 const render = Component => {
   ReactDOM.render(
     <AppContainer>

@@ -117,7 +117,7 @@ export default store => next => action => {
       }))
     },
     ({data, token}) => {
-      next({type: AuthenticationConstants.UPDATE_TOKEN, payload: {token}})
+      // next({type: AuthenticationConstants.UPDATE_TOKEN, payload: {token}})
       next({type: CommonConstants.HIDE_INDICATOR})
       return next(actionWith({
         type: failureType,
