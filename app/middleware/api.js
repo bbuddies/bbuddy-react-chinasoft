@@ -4,9 +4,9 @@ import qs from 'qs'
 import parse from 'parse-link-header'
 import 'isomorphic-fetch'
 import values from 'lodash/values'
-import * as CommonConstants from '../constants/common'
-import * as AuthenticationConstants from '../constants/authentication'
 import config from '../config'
+import * as CommonActions from '../actions/common'
+import * as AuthenticationActions from '../actions/authentication'
 
 function getNextPageUrl(response) {
   const link = response.headers.get('link')
@@ -105,20 +105,19 @@ export default store => next => action => {
 
   const [ requestType, successType, failureType ] = types
   next(actionWith({ type: requestType }))
-  next({type: CommonConstants.SHOW_INDICATOR})
+  next(CommonActions.showIndicator())
 
   return callApi(endpoint, method, data, schema, store.getState().authentication.token).then(
     ({data, token}) => {
-      next({type: AuthenticationConstants.UPDATE_TOKEN, payload: {token}})
-      next({type: CommonConstants.HIDE_INDICATOR})
+      next(AuthenticationActions.updateToken(token))
+      next(CommonActions.hideIndicator())
       return next(actionWith({
         data,
         type: successType
       }))
     },
     ({data, token}) => {
-      // next({type: AuthenticationConstants.UPDATE_TOKEN, payload: {token}})
-      next({type: CommonConstants.HIDE_INDICATOR})
+      next(CommonActions.hideIndicator())
       return next(actionWith({
         type: failureType,
         error: values(data).join(', ') || 'Something bad happened'

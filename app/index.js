@@ -8,15 +8,16 @@ import configureStore from './store/configureStore';
 
 injectTapEventPlugin();
 
+const defaultAuthentication = {isAuthenticated: false, token: {}, user: {}}
 let loadAuthentication = () => {
   try {
     const serializedState = localStorage.getItem('auth');
     if (serializedState === null) {
-      return {};
+      return defaultAuthentication
     }
-    return JSON.parse(serializedState);
+    return JSON.parse(serializedState)
   } catch (err) {
-    return {};
+    return defaultAuthentication
   }
 }
 
