@@ -41,7 +41,7 @@ function wrapState(ComposedComponent) {
 SelectableList = wrapState(SelectableList);
 
 const ListExampleSelectable = (props) => (
-    <SelectableList {...props} defaultValue={1} style={{}}>
+    <SelectableList {...props} defaultValue={1}>
       <ListItem value={1} primaryText="Dashboard" leftAvatar={<DashboardIcon />} />
       <ListItem value={2} primaryText="Accounts" leftAvatar={<AccountIcon />}/>
     </SelectableList>

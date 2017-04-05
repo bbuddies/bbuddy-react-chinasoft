@@ -17,15 +17,13 @@ $susy: (
 }
 
 .body {
-  @include span(10);
+  @include span(9);
   min-height: 800px;
   position: relative;
 }
 
 .sidebar {
   @include span(2);
-  width: 200px;
-  bottom: 0;
   border-right: solid 1px #d9d9d9;
   margin-top: 75px;
   min-height: 700px;

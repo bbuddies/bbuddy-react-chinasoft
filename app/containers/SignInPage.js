@@ -2,14 +2,6 @@ import React from 'react'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import EventListener from 'react-event-listener'
-import Notification from '../containers/Notification'
-import Indicator from '../containers/Indicator'
-import Header from '../components/header'
-import Sidebar from '../components/sidebar'
-import Body from '../components/body'
-import Footer from '../components/footer'
-import * as CommonActions from '../actions/common'
 import * as AuthenticationActions from '../actions/authentication'
 import {Card, CardTitle, CardText, TextField, CardActions, RaisedButton} from 'material-ui'
 
@@ -22,6 +14,13 @@ export default class SignInPage extends React.Component {
     this.props.signIn({email, password})
   }
 
+  keyPress(event){
+    if (event.charCode == 13){
+      event.preventDefault()
+      this.signIn()
+    }
+  }
+
   render() {
     const {pageStyle: {muiTheme}} = this.props
     return (
@@ -29,8 +28,8 @@ export default class SignInPage extends React.Component {
         <Card>
           <CardTitle title='Sign In'/>
           <CardText>
-            <TextField fullWidth={true} ref='email' hintText='Email'/>
-            <TextField fullWidth={true} ref='password' type="password" hintText='Password'/>
+            <TextField fullWidth={true} ref='email' hintText='Email' floatingLabelText='Email' autoFocus={true} />
+            <TextField fullWidth={true} ref='password' type="password" hintText='Password' floatingLabelText='Password' onKeyPress={event => this.keyPress(event)} />
           </CardText>
           <CardActions>
             <RaisedButton
