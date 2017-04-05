@@ -3,7 +3,7 @@ import React from 'react';
 export default class DashboardPage extends React.Component {
   render() {
     return (
-      <div>
+      <div style={{minHeight: 700}}>
         <h1>
           Dashboard
         </h1>

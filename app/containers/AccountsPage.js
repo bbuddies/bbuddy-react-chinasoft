@@ -22,7 +22,7 @@ export default class AccountsPage extends React.Component {
       <Card>
         <CardTitle title='Accounts'/>
         <CardText>
-          <Table height='800px' fixedHeader={true} >
+          <Table height='500px' fixedHeader={true} >
             <TableHeader>
               <TableRow>
                 <TableHeaderColumn tooltip="Name">Name</TableHeaderColumn>
