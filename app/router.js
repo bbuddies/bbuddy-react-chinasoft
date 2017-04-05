@@ -1,12 +1,13 @@
 import React from 'react'
 import {Router, Route, IndexRedirect, browserHistory, hashHistory} from 'react-router'
 import {syncHistoryWithStore} from 'react-router-redux'
-import Page from './containers/Page'
-import DashboardPage from './containers/DashboardPage'
-import SignInPage from './containers/SignInPage'
 import requireAuth from './authentication'
 import Authentication from './containers/Authentication'
 import history from './history'
+import SignInPage from './containers/SignInPage'
+import Page from './containers/Page'
+import DashboardPage from './containers/DashboardPage'
+import AccountsPage from './containers/AccountsPage'
 
 export default ({store}) => {
   const enhancedHistory = syncHistoryWithStore(history, store)
@@ -17,6 +18,7 @@ export default ({store}) => {
         <Route component={Authentication}>
           <IndexRedirect to="dashboard"/>
           <Route path="dashboard" component={DashboardPage}/>
+          <Route path="accounts" component={AccountsPage}/>
         </Route>
       </Route>
     </Router>

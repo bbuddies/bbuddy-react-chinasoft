@@ -32,7 +32,7 @@ export default class Page extends React.Component {
           <div>
             <Header />
             <div className="main">
-              <Sidebar className="sidebar" />
+              <Sidebar location={this.props.location} className="sidebar" />
               <div className="body">
                 <Body>
                 {this.props.children}

@@ -1,50 +1,34 @@
-import React, {Component, PropTypes} from 'react';
-import {List, ListItem, makeSelectable} from 'material-ui/List';
+import React from 'react';
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
+import {List, ListItem, makeSelectable} from 'material-ui'
 import DashboardIcon from 'material-ui/svg-icons/action/dashboard'
 import AccountIcon from 'material-ui/svg-icons/action/euro-symbol'
+import { routerActions } from 'react-router-redux'
 
-let SelectableList = makeSelectable(List);
+let SelectableList = makeSelectable(List)
 
-function wrapState(ComposedComponent) {
-  return class SelectableList extends Component {
-    static propTypes = {
-      children: PropTypes.node.isRequired,
-      defaultValue: PropTypes.number.isRequired,
-    };
-
-    componentWillMount() {
-      this.setState({
-        selectedIndex: this.props.defaultValue,
-      });
-    }
-
-    handleRequestChange = (event, index) => {
-      this.setState({
-        selectedIndex: index,
-      });
-    };
-
-    render() {
-      return (
-        <ComposedComponent
-          value={this.state.selectedIndex}
-          onChange={this.handleRequestChange}
-          {...this.props}
-        >
-          {this.props.children}
-        </ComposedComponent>
-      );
-    }
-  };
+@connect(mapStateToProps, mapDispatchToProps)
+export default class Sidebar extends React.Component {
+  goTo(pathname){
+    this.props.push(pathname)
+  }
+  render(){
+    return (
+      <SelectableList {...this.props} value={this.props.location.pathname} onChange={(event, value) => this.goTo(value)}>
+        <ListItem value="/dashboard" primaryText="Dashboard" leftAvatar={<DashboardIcon />} />
+        <ListItem value="/accounts" primaryText="Accounts" leftAvatar={<AccountIcon />}/>
+      </SelectableList>
+    )
+  }
 }
 
-SelectableList = wrapState(SelectableList);
+function mapStateToProps(state) {
+  return {
+  }
+}
 
-const ListExampleSelectable = (props) => (
-    <SelectableList {...props} defaultValue={1}>
-      <ListItem value={1} primaryText="Dashboard" leftAvatar={<DashboardIcon />} />
-      <ListItem value={2} primaryText="Accounts" leftAvatar={<AccountIcon />}/>
-    </SelectableList>
-);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(routerActions, dispatch)
+}
 
-export default ListExampleSelectable;
