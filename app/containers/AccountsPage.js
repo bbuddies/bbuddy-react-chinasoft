@@ -1,24 +1,12 @@
 import React from 'react';
-import {bindActionCreators} from 'redux'
-import {connect} from 'react-redux'
 import {Card, CardTitle, CardText, CardActions, RaisedButton, Table, TableHeader, TableBody, TableRow, TableHeaderColumn, TableRowColumn} from 'material-ui'
-import * as AccountActions from '../actions/account'
-import {routerActions} from 'react-router-redux'
-import merge from 'lodash/merge'
+import present from '../presenters/accountsPagePresenter'
 
-@connect(mapStateToProps, mapDispatchToProps)
+@present
 export default class AccountsPage extends React.Component {
-  componentWillMount(){
-    this.loadData()
-  }
-  loadData(){
-    this.props.loadAccounts()
-  }
-  add(){
-    this.props.push('/accounts/add')
-  }
   render() {
-    let {accounts} = this.props
+    const {accounts} = this.props
+    const {goToAddAccount} = this.props
     return (
       <Card>
         <CardTitle title='Accounts'/>
@@ -41,22 +29,10 @@ export default class AccountsPage extends React.Component {
           </Table>
         </CardText>
         <CardActions>
-          <RaisedButton
-            label='Add'
-            primary={true}
-            onTouchTap={() => this.add()}/>
+          <RaisedButton label='Add' primary={true} onTouchTap={goToAddAccount}/>
         </CardActions>
       </Card>
     )
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    accounts: Object.values(state.entities.accounts)
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(merge({}, AccountActions, routerActions), dispatch)
-}

@@ -1,8 +1,13 @@
-import { goBack, push} from 'react-router-redux';
+import { goBack as back, push} from 'react-router-redux';
 
 export function goBack(){
   return (dispatch, getState) => {
-    dispatch(goBack())
+    dispatch(back())
   }
 }
 
+export function goToAddAccount(){
+  return (dispatch, getState) => {
+    dispatch(push('/accounts/add'))
+  }
+}
