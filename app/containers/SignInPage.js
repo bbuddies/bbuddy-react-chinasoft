@@ -28,12 +28,12 @@ export default class SignInPage extends React.Component {
         <Card>
           <CardTitle title='Sign In'/>
           <CardText>
-            <TextField fullWidth={true} ref='email' hintText='Email' floatingLabelText='Email' autoFocus={true} />
-            <TextField fullWidth={true} ref='password' type="password" hintText='Password' floatingLabelText='Password' onKeyPress={event => this.keyPress(event)} />
+            <TextField fullWidth={true} id='Username' ref='email' hintText='Email' floatingLabelText='Email' autoFocus={true} />
+            <TextField fullWidth={true} id='Password' ref='password' type="password" hintText='Password' floatingLabelText='Password' onKeyPress={event => this.keyPress(event)} />
           </CardText>
           <CardActions>
             <RaisedButton
-              label='Sign In'
+              label='Login'
               primary={true}
               onTouchTap={() => this.signIn()}/>
           </CardActions>
