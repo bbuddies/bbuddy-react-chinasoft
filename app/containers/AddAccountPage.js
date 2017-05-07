@@ -19,8 +19,8 @@ export default class AddAccountsPage extends React.Component {
       <Card>
         <CardTitle title='Add Account'/>
         <CardText>
-          <TextField fullWidth={true} ref="name" hintText="Name" floatingLabelText="Name" autoFocus />
-          <TextField fullWidth={true} ref="balance" hintText="Balance" floatingLabelText="Balance" />
+          <TextField fullWidth={true} id="name" ref="name" hintText="Name" floatingLabelText="Name" autoFocus />
+          <TextField fullWidth={true} id="balanceBroughtForward" ref="balance" hintText="Balance" floatingLabelText="Balance" />
         </CardText>
         <CardActions>
           <RaisedButton
