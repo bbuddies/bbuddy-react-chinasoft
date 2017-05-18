@@ -25,12 +25,5 @@ export function signIn(credential){
 }
 
 export function updateToken(token){
-  if (token.accessToken == null ||
-      token.client == null ||
-      token.expiry == null ||
-      token.type == null ||
-      token.uid == null)
-    return {type: AuthenticationConstants.NOT_UPDATE_TOKEN}
-
   return {type: AuthenticationConstants.UPDATE_TOKEN, payload: {token}}
 }

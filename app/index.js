@@ -11,11 +11,12 @@ injectTapEventPlugin();
 const defaultAuthentication = {isAuthenticated: false, token: {}, user: {}}
 let loadAuthentication = () => {
   try {
-    const serializedState = localStorage.getItem('auth');
-    if (serializedState === null) {
+    const serializedToken = localStorage.getItem('token');
+    if (serializedToken === null) {
       return defaultAuthentication
     }
-    return JSON.parse(serializedState)
+    let token = JSON.parse(serializedToken)
+    return {isAuthenticated: !!token, token}
   } catch (err) {
     return defaultAuthentication
   }

@@ -7,6 +7,7 @@ import values from 'lodash/values'
 import config from '../config'
 import * as CommonActions from '../actions/common'
 import * as AuthenticationActions from '../actions/authentication'
+import { push } from 'react-router-redux';
 
 function getNextPageUrl(response) {
   const link = response.headers.get('link')
@@ -55,7 +56,7 @@ function callApi(endpoint, method, data, schema, token) {
       }
 
       if (!response.ok) {
-        return Promise.reject({data: json, token})
+        return Promise.reject({status: response.status, data: json, token})
       }
 
       const camelizedJson = camelizeKeys(json)
@@ -87,9 +88,6 @@ export default store => next => action => {
   if (typeof endpoint !== 'string') {
     throw new Error('Specify a string endpoint URL.')
   }
-  // if (!schema) {
-  //   throw new Error('Specify one of the exported Schemas.')
-  // }
   if (!Array.isArray(types) || types.length !== 3) {
     throw new Error('Expected an array of three action types.')
   }
@@ -109,14 +107,19 @@ export default store => next => action => {
 
   return callApi(endpoint, method, data, schema, store.getState().authentication.token).then(
     ({data, token}) => {
-      next(AuthenticationActions.updateToken(token))
+      if (token.accessToken != null && token.client != null && token.expiry != null && token.type != null && token.uid != null){
+        next(AuthenticationActions.updateToken(token))
+      }
       next(CommonActions.hideIndicator())
       return next(actionWith({
         data,
         type: successType
       }))
     },
-    ({data, token}) => {
+    ({status, data, token}) => {
+      if (status == 401){
+        next(push('/signin'))
+      }
       next(CommonActions.hideIndicator())
       return next(actionWith({
         type: failureType,
