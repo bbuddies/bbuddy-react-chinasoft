@@ -1,10 +1,11 @@
 import * as AuthenticationConstants from '../constants/authentication'
-import throttle from 'lodash/throttle'
 
-let saveAuthentication = (authentication) => {
+let saveAuthentication = (token) => {
   try {
-    const serializedAuthentication = JSON.stringify(authentication);
-    localStorage.setItem('token', serializedAuthentication);
+    if (token.accessToken != null && token.client != null && token.expiry != null && token.type != null && token.uid != null) {
+      const serializedToken = JSON.stringify(token);
+      localStorage.setItem('token', serializedToken);
+    }
   } catch (err) {
     console.error(err)
   }

@@ -1,5 +1,5 @@
-import { normalize } from 'normalizr'
-import { camelizeKeys } from 'humps'
+import {normalize} from 'normalizr'
+import {camelizeKeys} from 'humps'
 import qs from 'qs'
 import parse from 'parse-link-header'
 import 'isomorphic-fetch'
@@ -7,7 +7,7 @@ import values from 'lodash/values'
 import config from '../config'
 import * as CommonActions from '../actions/common'
 import * as AuthenticationActions from '../actions/authentication'
-import { push } from 'react-router-redux';
+import {push} from 'react-router-redux';
 
 function getNextPageUrl(response) {
   const link = response.headers.get('link')
@@ -36,8 +36,8 @@ function callApi(endpoint, method, data, schema, token) {
     method: method,
     credentials: 'include'
   }
-  if (data){
-    if (method.toLowerCase() == 'get'){
+  if (data) {
+    if (method.toLowerCase() == 'get') {
       fullUrl += '?' + qs.stringify(data)
     } else {
       options['body'] = JSON.stringify(data)
@@ -45,8 +45,8 @@ function callApi(endpoint, method, data, schema, token) {
   }
 
   return fetch(fullUrl, options)
-    .then(response => response.json().then(json => ({ json, response })))
-    .then(({ json, response }) => {
+    .then(response => response.json().then(json => ({json, response})))
+    .then(({json, response}) => {
       let token = {
         accessToken: response.headers.get('access-token'),
         client: response.headers.get('client'),
@@ -78,8 +78,8 @@ export default store => next => action => {
     return next(action)
   }
 
-  let { endpoint } = callAPI
-  const { schema, types, method, data } = callAPI
+  let {endpoint} = callAPI
+  const {schema, types, method, data} = callAPI
 
   if (typeof endpoint === 'function') {
     endpoint = endpoint(store.getState())
@@ -101,15 +101,13 @@ export default store => next => action => {
     return finalAction
   }
 
-  const [ requestType, successType, failureType ] = types
-  next(actionWith({ type: requestType }))
+  const [requestType, successType, failureType] = types
+  next(actionWith({type: requestType}))
   next(CommonActions.showIndicator())
 
   return callApi(endpoint, method, data, schema, store.getState().authentication.token).then(
     ({data, token}) => {
-      if (token.accessToken != null && token.client != null && token.expiry != null && token.type != null && token.uid != null){
-        next(AuthenticationActions.updateToken(token))
-      }
+      next(AuthenticationActions.updateToken(token))
       next(CommonActions.hideIndicator())
       return next(actionWith({
         data,
@@ -117,7 +115,7 @@ export default store => next => action => {
       }))
     },
     ({status, data, token}) => {
-      if (status == 401){
+      if (status == 401) {
         next(push('/signin'))
       }
       next(CommonActions.hideIndicator())
