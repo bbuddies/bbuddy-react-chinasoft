@@ -92,7 +92,9 @@ export default store => next => action => {
 
   return callApi(endpoint, method, data, schema, store.getState().authentication.token).then(
     ({data, token}) => {
-      next(AuthenticationActions.updateToken(token))
+      if (token.accessToken != null && token.client != null && token.expiry != null && token.type != null && token.uid != null) {
+        next(AuthenticationActions.updateToken(token))
+      }
       next(CommonActions.hideIndicator())
       return next(actionWith({ data, type: successType }))
     },
