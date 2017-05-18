@@ -78,22 +78,7 @@ export default store => next => action => {
     return next(action)
   }
 
-  let {endpoint} = callAPI
-  const {schema, types, method, data} = callAPI
-
-  if (typeof endpoint === 'function') {
-    endpoint = endpoint(store.getState())
-  }
-
-  if (typeof endpoint !== 'string') {
-    throw new Error('Specify a string endpoint URL.')
-  }
-  if (!Array.isArray(types) || types.length !== 3) {
-    throw new Error('Expected an array of three action types.')
-  }
-  if (!types.every(type => typeof type === 'string')) {
-    throw new Error('Expected action types to be strings.')
-  }
+  const {endpoint, schema, types, method, data} = callAPI
 
   function actionWith(data) {
     const finalAction = Object.assign({}, action, data)
@@ -109,10 +94,7 @@ export default store => next => action => {
     ({data, token}) => {
       next(AuthenticationActions.updateToken(token))
       next(CommonActions.hideIndicator())
-      return next(actionWith({
-        data,
-        type: successType
-      }))
+      return next(actionWith({ data, type: successType }))
     },
     ({status, data, token}) => {
       if (status == 401) {
