@@ -1,6 +1,14 @@
 import {AccountsPagePresenter} from '../../app/presenters/accountsPagePresenter'
 
 describe('AccountsPagePresenter', () => {
+  it('load accounts', () => {
+    let props = {loadAccounts: () => {}}
+    let loadAccountsSpy = sinon.spy(props, 'loadAccounts')
+    let presenter = new AccountsPagePresenter(props)
+    presenter.loadData()
+
+    loadAccountsSpy.should.be.called
+  })
   it('mapStateToProps', () => {
     let state = {
       entities: {

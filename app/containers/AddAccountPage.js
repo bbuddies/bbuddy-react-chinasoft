@@ -1,18 +1,14 @@
 import React from 'react';
-import {bindActionCreators} from 'redux'
-import {connect} from 'react-redux'
 import {Card, CardTitle, CardText, CardActions, RaisedButton, TextField} from 'material-ui'
-import merge from 'lodash/merge'
-import {routerActions} from 'react-router-redux'
-import * as AccountActions from '../actions/account'
+import present from '../presenters/addAccountPagePresenter'
 
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class AddAccountsPage extends React.Component {
+@present
+export default class AddAccountPage extends React.Component {
   save(){
     let name = this.refs.name.getValue()
     let balance = this.refs.balance.getValue()
-    this.props.addAccount({name, balance}, () => {this.props.goBack()})
+    this.props.addAccount({name, balance})
   }
   render() {
     return (
@@ -31,13 +27,4 @@ export default class AddAccountsPage extends React.Component {
       </Card>
     )
   }
-}
-
-function mapStateToProps(state) {
-  return {
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(merge({}, AccountActions, routerActions), dispatch)
 }
