@@ -5,24 +5,12 @@ import {AppContainer} from 'react-hot-loader'
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Root from './containers/Root';
 import configureStore from './store/configureStore';
+import {fetchToken} from './api/token'
 
 injectTapEventPlugin();
 
-const defaultAuthentication = {isAuthenticated: false, token: {}, user: {}}
-let loadAuthentication = () => {
-  try {
-    const serializedToken = localStorage.getItem('token');
-    if (serializedToken === null) {
-      return defaultAuthentication
-    }
-    let token = JSON.parse(serializedToken)
-    return {isAuthenticated: !!token, token}
-  } catch (err) {
-    return defaultAuthentication
-  }
-}
-
-const store = configureStore({authentication: loadAuthentication()})
+let token = fetchToken()
+const store = configureStore({authentication: {isAuthenticated: !!token.client}})
 const render = Component => {
   ReactDOM.render(
     <AppContainer>

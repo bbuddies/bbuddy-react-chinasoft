@@ -24,6 +24,3 @@ export function signIn(credential){
   }
 }
 
-export function updateToken(token){
-  return {type: AuthenticationConstants.UPDATE_TOKEN, payload: {token}}
-}

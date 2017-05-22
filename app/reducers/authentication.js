@@ -5,8 +5,6 @@ export default function authentication(state = {isAuthenticated: false, token: {
   switch (action.type) {
     case AuthenticationConstants.SIGN_IN_SUCCESS:
       return merge({}, state, {isAuthenticated: true})
-    case AuthenticationConstants.UPDATE_TOKEN:
-      return merge({}, state, {isAuthenticated: true, token: action.payload.token})
     case AuthenticationConstants.SIGN_IN_FAILURE:
       return merge({}, state, {isAuthenticated: false})
     default:
