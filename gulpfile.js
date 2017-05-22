@@ -9,7 +9,7 @@ var mocha = require("gulp-mocha");
 
 const dev = !process.argv.includes('--production')
 
-gulp.task("default", ["build", "server", "mocha"], function () {
+gulp.task("default", ["server", "mocha"], function () {
     gulp.watch(["app/**/*", "sass/**/*"], ["build"]);
     gulp.watch(["app/**/*", "test/**/*.js"], ["mocha"]);
 });

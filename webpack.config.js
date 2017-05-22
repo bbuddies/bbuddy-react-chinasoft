@@ -32,7 +32,7 @@ module.exports = function (dev) {
         colors: true
       },
       contentBase: './www/',  //Relative directory for base of server
-      hot: true,
+      hot: dev,
       inline: true,
       port: 8100        //Port Number
     },
