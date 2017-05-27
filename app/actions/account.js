@@ -1,4 +1,4 @@
-import {fetchAccounts, createAccount} from './account.generated'
+import {fetchAccounts, createAccount, ADD_ACCOUNT_SUCCESS} from './account.generated'
 
 export function loadAccounts(){
   return (dispatch, getState) => {
@@ -8,6 +8,10 @@ export function loadAccounts(){
 
 export function addAccount(account, success){
   return (dispatch, getState) => {
-    dispatch(createAccount(account)).then(success)
+    dispatch(createAccount(account)).then(action => {
+      if (action.type == ADD_ACCOUNT_SUCCESS){
+        success()
+      }
+    })
   }
 }
