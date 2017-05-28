@@ -7,10 +7,11 @@ import webpackConfig from './webpack.config'
 import mocha from 'gulp-mocha'
 import template from 'gulp-template'
 import rename from 'gulp-rename'
+import istanbul from 'gulp-istanbul'
+import clean from 'gulp-clean'
 import minimist from 'minimist'
 import pluralize from 'pluralize'
 import _ from 'lodash'
-import istanbul from 'gulp-istanbul'
 import {Instrumenter} from 'isparta'
 
 const dev = !process.argv.includes('--production')
@@ -39,14 +40,14 @@ gulp.task("istanbul", function(){
     .pipe(istanbul.hookRequire())
 })
 
-gulp.task("coverage", ["istanbul"], function(){
+gulp.task("coverage", ["clean:coverage", "istanbul"], function(){
   return gulp.src(['test/**/*.js'], { read: false })
     .pipe(mocha())
     .on('error', gutil.log)
     .pipe(istanbul.writeReports())
 })
 
-gulp.task("build", callback => {
+gulp.task("build", ["clean:build"], callback => {
   webpack(webpackConfig(dev), function (err, stats) {
     if (err) throw new gutil.PluginError("build", err)
     gutil.log("[build]", stats.toString({
@@ -56,6 +57,18 @@ gulp.task("build", callback => {
     callback()
   });
 });
+
+gulp.task("clean", ["clean:build", "clean:coverage"])
+
+gulp.task("clean:build", () => {
+  return gulp.src(['dist'], {read: false})
+    .pipe(clean())
+})
+
+gulp.task("clean:coverage", () => {
+  return gulp.src(['coverage'], {read: false})
+    .pipe(clean())
+})
 
 gulp.task("server", () => {
   new WebpackDevServer(webpack(webpackConfig(dev)))
