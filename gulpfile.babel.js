@@ -1,4 +1,3 @@
-// require('babel-core/register');
 import gulp from 'gulp'
 import gutil from 'gulp-util'
 import notify from 'gulp-notify'
@@ -11,6 +10,8 @@ import rename from 'gulp-rename'
 import minimist from 'minimist'
 import pluralize from 'pluralize'
 import _ from 'lodash'
+import istanbul from 'gulp-istanbul'
+import {Instrumenter} from 'isparta'
 
 const dev = !process.argv.includes('--production')
 
@@ -24,6 +25,25 @@ gulp.task("mocha", () => {
     .pipe(mocha())
     .on('error', gutil.log)
     .on('error', notify.onError("Error: <%= error.message %>"));
+})
+
+gulp.task("istanbul", function(){
+  return gulp.src(['app/**/*.js'])
+    .pipe(istanbul({
+      instrumenter: Instrumenter,
+      instrumention: {
+        excludes: ['app/components/*', 'app/constants/*', 'app/containers/*', 'app/store/*']
+      },
+      includeUntested: true,
+    }))
+    .pipe(istanbul.hookRequire())
+})
+
+gulp.task("coverage", ["istanbul"], function(){
+  return gulp.src(['test/**/*.js'], { read: false })
+    .pipe(mocha())
+    .on('error', gutil.log)
+    .pipe(istanbul.writeReports())
 })
 
 gulp.task("build", callback => {
@@ -49,7 +69,7 @@ gulp.task('actions', () => {
   let argv = minimist(process.argv.slice(2))
   let {entity} = argv
   let entities = pluralize(entity)
-  gulp.src('app/templates/apiActions.js')
+  gulp.src('templates/apiActions.js')
     .pipe(template({
       entity,
       entities,

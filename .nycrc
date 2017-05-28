@@ -1,0 +1,17 @@
+{
+  "all": true,
+  "reporter": [
+    "lcov",
+    "html",
+    "text"
+  ],
+  "include": [
+    "app/**/*.js"
+  ],
+  "exclude": [
+      "app/components/*",
+      "app/constants/*",
+      "app/containers/*",
+      "app/store/*"
+  ]
+}
