@@ -28,7 +28,7 @@ gulp.task("mocha", () => {
     .on('error', notify.onError("Error: <%= error.message %>"));
 })
 
-gulp.task("istanbul", function(){
+gulp.task("istanbul", () => {
   return gulp.src(['app/**/*.js'])
     .pipe(istanbul({
       instrumenter: Instrumenter,
@@ -40,7 +40,7 @@ gulp.task("istanbul", function(){
     .pipe(istanbul.hookRequire())
 })
 
-gulp.task("coverage", ["clean:coverage", "istanbul"], function(){
+gulp.task("coverage", ["clean:coverage", "istanbul"], () => {
   return gulp.src(['test/**/*.js'], { read: false })
     .pipe(mocha())
     .on('error', gutil.log)
@@ -48,7 +48,7 @@ gulp.task("coverage", ["clean:coverage", "istanbul"], function(){
 })
 
 gulp.task("build", ["clean:build"], callback => {
-  webpack(webpackConfig(dev), function (err, stats) {
+  webpack(webpackConfig(dev), (err, stats) => {
     if (err) throw new gutil.PluginError("build", err)
     gutil.log("[build]", stats.toString({
       chunks: false,
@@ -72,7 +72,7 @@ gulp.task("clean:coverage", () => {
 
 gulp.task("server", () => {
   new WebpackDevServer(webpack(webpackConfig(dev)))
-    .listen(8100, "localhost", function (err) {
+    .listen(8100, "localhost", err => {
       if (err) throw new gutil.PluginError("webpack-dev-server", err)
       gutil.log("[webpack-dev-server]", "http://localhost:8100/")
     })
