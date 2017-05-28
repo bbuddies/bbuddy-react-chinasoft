@@ -2,7 +2,7 @@ import { CALL_API } from '../middleware/api'
 import * as AuthenticationConstants from '../constants/authentication'
 import {push} from 'react-router-redux'
 
-function doSignIn(credential){
+export function doSignIn(credential){
   return {
     [CALL_API]: {
       types: [AuthenticationConstants.SIGN_IN_REQUEST, AuthenticationConstants.SIGN_IN_SUCCESS, AuthenticationConstants.SIGN_IN_FAILURE],
