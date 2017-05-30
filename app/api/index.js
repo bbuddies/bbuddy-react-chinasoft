@@ -1,20 +1,9 @@
 import {normalize} from 'normalizr'
 import {camelizeKeys} from 'humps'
 import qs from 'qs'
-import parse from 'parse-link-header'
 import 'isomorphic-fetch'
 import config from '../config'
 import {storeToken, fetchToken} from './token'
-
-function getNextPageUrl(response) {
-  const link = response.headers.get('link')
-  if (!link) {
-    return null
-  }
-
-  const parsed = parse(link)
-  return parsed.next && parsed.next.url
-}
 
 export default function callApi(endpoint, method, data, schema) {
   var fullUrl = (endpoint.indexOf(config.apiUrl) === -1) ? config.apiUrl + endpoint : endpoint
@@ -40,7 +29,7 @@ export default function callApi(endpoint, method, data, schema) {
   }
 
   return fetch(fullUrl, options)
-    .then(response => response.json().then(json => ({json, response})))
+    .then(response => response.json().then(json =>  ({json, response}) ))
     .then(({json, response}) => {
       let token = {
         accessToken: response.headers.get('access-token'),
@@ -56,8 +45,7 @@ export default function callApi(endpoint, method, data, schema) {
       }
 
       const camelizedJson = camelizeKeys(json)
-      const nextPageUrl = getNextPageUrl(response)
 
-      return schema ? Object.assign({}, normalize(camelizedJson, schema), {nextPageUrl}) : camelizedJson
+      return schema ? normalize(camelizedJson, schema) : camelizedJson
     })
 }
