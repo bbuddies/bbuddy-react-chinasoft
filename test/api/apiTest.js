@@ -4,14 +4,18 @@ import * as token from '../../app/api/token'
 import { schema } from 'normalizr'
 
 describe('api', () => {
-  let fetch, response
-  let fetchToken = sinon.stub(token, 'fetchToken')
-  let storeToken = sinon.stub(token, 'storeToken')
+  let fetch, response, fetchToken, storeToken
   beforeEach(() => {
     response = {json: () => Promise.resolve({}), ok: true, headers: {get: () => {}}}
     fetch = sinon.stub().returns(Promise.resolve(response))
+    fetchToken = sinon.stub(token, 'fetchToken')
+    storeToken = sinon.stub(token, 'storeToken')
     fetchToken.returns({})
     global.fetch = fetch
+  })
+  afterEach(() => {
+    fetchToken.restore()
+    storeToken.restore()
   })
   context('request', () => {
     it('use url', () => {
@@ -65,7 +69,9 @@ describe('api', () => {
       getHeader.withArgs('expiry').returns('RESPONSE_EXPIRY')
       getHeader.withArgs('token-type').returns('RESPONSE_TYPE')
       getHeader.withArgs('uid').returns('RESPONSE_UID')
+
       callApi('ENDPOINT', 'POST', {}, null)
+
       storeToken.should.be.calledWith({
         accessToken: 'RESPONSE_ACCESS_TOKEN',
         client: 'RESPONSE_CLIENT',
@@ -78,28 +84,35 @@ describe('api', () => {
       response.json = () => Promise.resolve({a:1})
       response.ok = false
       response.status = 400
-      let promiseResult = callApi('ENDPOINT', 'POST', {}, null)
-      promiseResult.value.should.be.eql({
-        status: 400,
-        data: {a:1}
+
+      let success = sinon.spy()
+      callApi('ENDPOINT', 'POST', {}, null).then(success, (result) => {
+        result.should.be.eql({
+          status: 400,
+          data: {a:1}
+        })
       })
+      success.should.not.be.called
+
     })
     it('camelized json data', () => {
       response.json = () => Promise.resolve({a_id:1})
-      let promiseResult = callApi('ENDPOINT', 'POST', {}, null)
-      promiseResult.value.should.be.eql({ aId: 1 })
+      callApi('ENDPOINT', 'POST', {}, null).then(result => {
+        result.should.be.eql({ aId: 1 })
+      })
     })
     it('normalized json data', () => {
       response.json = () => Promise.resolve({id:2, name: 'Name'})
       let account = new schema.Entity('accounts')
-      let promiseResult = callApi('ENDPOINT', 'POST', {}, account)
-      promiseResult.value.should.be.eql({
-        entities: {
-          accounts: {
-            2: {id: 2, name: 'Name'}
-          }
-        },
-        result: 2})
+      callApi('ENDPOINT', 'POST', {}, account).then(result => {
+        result.should.be.eql({
+          entities: {
+            accounts: {
+              2: {id: 2, name: 'Name'}
+            }
+          },
+          result: 2})
+      })
     })
   })
 })
