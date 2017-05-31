@@ -1,7 +1,7 @@
 import indicator from '../../app/reducers/indicator';
 var should = require('chai').should();
 
-describe('indicator reducers', function() {
+describe('Indicator reducers', function() {
   it('shows progress indicator when request starts', function(){
     var state = indicator({open: false}, {type: 'SHOW_INDICATOR'});
     state.should.eql({open: true})
