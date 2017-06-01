@@ -5,14 +5,14 @@ export default Presenter => ComposedComponent => connect(Presenter.mapStateToPro
   presenter = new Presenter(this.props)
   componentWillMount() {
     this.presenter.setState = (updater, callback) => this.setState(updater, callback)
-    this.presenter.loadData()
+    this.presenter.loadData && this.presenter.loadData()
   }
   componentWillReceiveProps(nextProps) {
     this.presenter.props = nextProps
   }
   render() {
     return(
-      <ComposedComponent {...this.presenter.getProps()} {...this.state}/>
+      <ComposedComponent {...this.presenter.props} {...this.presenter.getProps && this.presenter.getProps()} {...this.state}/>
     )
   }
 })

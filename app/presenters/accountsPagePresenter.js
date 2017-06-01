@@ -12,9 +12,6 @@ export class AccountsPagePresenter {
   loadData(){
     this.props.loadAccounts()
   }
-  getProps(){
-    return this.props
-  }
 
   static mapStateToProps(state) {
     return {

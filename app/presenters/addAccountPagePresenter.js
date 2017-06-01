@@ -8,11 +8,8 @@ export class AddAccountPagePresenter {
   constructor(props){
     this.props = props
   }
-  loadData(){
-  }
   getProps(){
     return {
-      ...this.props,
       addAccount: account => this.addAccount(account)
     }
   }
@@ -21,8 +18,7 @@ export class AddAccountPagePresenter {
   }
 
   static mapStateToProps(state) {
-    return {
-    }
+    return {}
   }
 
   static mapDispatchToProps(dispatch) {
