@@ -70,7 +70,7 @@ describe('api', () => {
       getHeader.withArgs('token-type').returns('RESPONSE_TYPE')
       getHeader.withArgs('uid').returns('RESPONSE_UID')
 
-      callApi('ENDPOINT', 'POST', {}, null)
+      callApi('ENDPOINT', 'POST')
 
       storeToken.should.be.calledWith({
         accessToken: 'RESPONSE_ACCESS_TOKEN',
@@ -86,7 +86,7 @@ describe('api', () => {
       response.status = 400
 
       let success = sinon.spy()
-      callApi('ENDPOINT', 'POST', {}, null).then(success, (result) => {
+      callApi('ENDPOINT', 'POST').then(success, (result) => {
         result.should.be.eql({
           status: 400,
           data: {a:1}
@@ -97,7 +97,7 @@ describe('api', () => {
     })
     it('camelized json data', () => {
       response.json = () => Promise.resolve({a_id:1})
-      callApi('ENDPOINT', 'POST', {}, null).then(result => {
+      callApi('ENDPOINT', 'POST').then(result => {
         result.should.be.eql({ aId: 1 })
       })
     })
