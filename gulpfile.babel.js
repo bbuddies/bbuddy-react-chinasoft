@@ -7,12 +7,11 @@ import webpackConfig from './webpack.config'
 import mocha from 'gulp-mocha'
 import template from 'gulp-template'
 import rename from 'gulp-rename'
-import istanbul from 'gulp-istanbul'
 import clean from 'gulp-clean'
 import minimist from 'minimist'
 import pluralize from 'pluralize'
 import _ from 'lodash'
-import {Instrumenter} from 'isparta'
+import run from 'gulp-run'
 
 const dev = !process.argv.includes('--production')
 
@@ -28,23 +27,8 @@ gulp.task("mocha", () => {
     .on('error', notify.onError("Error: <%= error.message %>"));
 })
 
-gulp.task("istanbul", () => {
-  return gulp.src(['app/**/*.js'])
-    .pipe(istanbul({
-      instrumenter: Instrumenter,
-      instrumention: {
-        excludes: ['app/components/*', 'app/constants/*', 'app/containers/*', 'app/store/*']
-      },
-      includeUntested: true,
-    }))
-    .pipe(istanbul.hookRequire())
-})
-
-gulp.task("coverage", ["clean:coverage", "istanbul"], () => {
-  return gulp.src(['test/**/*.js'], { read: false })
-    .pipe(mocha())
-    .on('error', gutil.log)
-    .pipe(istanbul.writeReports())
+gulp.task("coverage", ["clean:coverage"], () => {
+  return run('nyc mocha').exec()
 })
 
 gulp.task("build", ["clean:build"], callback => {
