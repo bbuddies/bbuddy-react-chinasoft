@@ -10,4 +10,8 @@ describe('Indicator reducers', function() {
     var state = indicator({open: true}, {type: 'HIDE_INDICATOR'});
     state.should.eql({open: false})
   })
+  it('with default state', () => {
+    var state = indicator(undefined, {type: 'SOME_ACTION'});
+    state.should.eql({open: false})
+  })
 })
