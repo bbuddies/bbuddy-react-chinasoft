@@ -1,24 +1,34 @@
 import React from 'react'
-import Counter from '../components/counter'
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
+import merge from 'lodash/merge'
+import * as CounterActions from '../actions/counter'
 
+@connect(mapStateToProps, mapDispatchToProps)
 export default class CounterPage extends React.Component {
-  state = {fruit: {name:"Counter", count: 0}}
-  add(offset) {
-    this.state.fruit.count += offset
-    this.setState(this.state)
-  }
-  increase() {
-    this.add(1)
-  }
-  decrease(){
-    this.add(-1)
-  }
   render() {
+    const {counter: {name, count}, increase, decrease} = this.props
     return (
-        <Counter name={this.state.fruit.name} count={this.state.fruit.count}
-                 onAddClick={() => this.increase()}
-                 onMinusClick={() => this.decrease()}
-        />
+      <div>
+        <span>{name}: </span><span>{count}</span>
+        <button onClick={increase}>+</button>
+        <button onClick={decrease}>-</button>
+      </div>
     )
   }
 }
+
+function mapStateToProps(state){
+  return {
+    counter: state.counter
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return bindActionCreators(CounterActions, dispatch)
+}
+
+
+
+
+
