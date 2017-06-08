@@ -7,6 +7,7 @@ import * as NavigationActions from '../actions/navigation'
 import * as BudgetActions from '../actions/budget'
 import values from 'lodash/values'
 import moment from 'moment'
+import _ from 'lodash'
 
 const mapStateToProps = (state) => ({ budgets: values(state.entities.budgets)})
 const mapDispatchToProps = (dispatch) => bindActionCreators(merge({}, BudgetActions, NavigationActions), dispatch)
@@ -18,13 +19,12 @@ export default class AddBudgetPage extends React.Component {
     const amount = this.refs.amount.getValue()
     const {budgets} = this.props
     //validte month and amount
-    if (!(this.validateMonth(month) &&  this.validateAmount(amount))) return; 
-    for(let index in budgets){
-        if(budgets[index].month === month) {
-          budgets[index].amount = amount
-          this.props.updateAddedBudget(budgets[index], this.props.goBack)
-          return;
-        }
+    if (!(this.validateMonth(month) &&  this.validateAmount(amount))) return;
+
+    const exist = _.find(budgets, budget => budget.month === month)
+    if (exist){
+      this.props.updateAddedBudget(merge({}, exist, {amount}), this.props.goBack)
+      return;
     }
     this.props.addBudget({month, amount}, this.props.goBack);
   }
