@@ -62,6 +62,7 @@ export function update<%= Entity %>(<%= entity %>){
           types: [UPDATE_<%= ENTITY %>_REQUEST, UPDATE_<%= ENTITY %>_SUCCESS, UPDATE_<%= ENTITY %>_FAILURE],
           endpoint: `<%= entities %>/${<%= entity %>.id}`,
           method: 'PUT',
+          data: <%= entity %>,
           schema: <%= Entity %>
       }
   }
