@@ -5,6 +5,10 @@ import present from '../presenters/addAccountPagePresenter'
 
 @present
 export default class AddAccountPage extends React.Component {
+  
+  componentWillMount(){
+    this.props.loadBudgets()
+  }
   save(){
     let name = this.refs.name.getValue()
     let balance = this.refs.balance.getValue()
