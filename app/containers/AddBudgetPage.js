@@ -14,21 +14,32 @@ export default class AddBudgetPage extends React.Component {
   save(){
     const month = this.refs.month.getValue()
     const amount = this.refs.amount.getValue()
-    var reg = /((((19|20)\d{2})-(0?(1|[3-9])|1[012])-(0?[1-9]|[12]\d|30))|(((19|20)\d{2})-(0?[13578]|1[02])-31)|(((19|20)\d{2})-0?2-(0?[1-9]|1\d|2[0-8]))|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))-0?2-29))$/g;
-    if(!amount){
-    	alert("输入不能为空");
-    	return;
-    }else if(isNaN(Number(amount))){
-    	alert("amount必须为数字");
-    	return;
-    }else if(!reg.test(month)){
-    	alert("日期输入有误,参考格式:yyyy-mm-dd");
-    	return;
-    }else{
-    	this.props.addBudget({month, amount}, this.props.goBack)
+    if(this.validate(month,amount)){
+    	console.log(this.validate(month,amount))
+    	//this.props.addBudget({month, amount}, this.props.goBack)
     }
-    
-    
+     
+  }
+  validate(month,amount){
+  	
+  	var reg = /^((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/;
+    if(!amount || amount == 0 ){
+    	alert("amount输入不能为空或为0");
+    	return false;
+    }else if(isNaN(Number(amount))){
+    	alert("amount必须是数字");
+    	return false;
+    }else if(!month){
+    	alert("month不能为空");
+    	return false;
+    } else if(!reg.test(month)){
+    	alert("日期输入有误,参考格式:yyyy-mm");
+    	return false;
+    }else{
+    	return true;
+    }
+  	
+  	
   }
   render() {
     const {goBack} = this.props
