@@ -62,6 +62,7 @@ export function updateBudget(budget){
           types: [UPDATE_BUDGET_REQUEST, UPDATE_BUDGET_SUCCESS, UPDATE_BUDGET_FAILURE],
           endpoint: `budgets/${budget.id}`,
           method: 'PUT',
+          data: budget,
           schema: Budget
       }
   }
