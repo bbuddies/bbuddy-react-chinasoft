@@ -17,16 +17,16 @@ export default class AddBudgetPage extends React.Component {
     const month = this.refs.month.getValue()
     const amount = this.refs.amount.getValue()
     const {budgets} = this.props
-    if (this.validateMonth(month) &&  this.validateAmount(amount)) {
-      for(let index in budgets){
-        if(budgets[index].month === month){
+    //validte month and amount
+    if (!(this.validateMonth(month) &&  this.validateAmount(amount))) return; 
+    for(let index in budgets){
+        if(budgets[index].month === month) {
           budgets[index].amount = amount
           this.props.updateAddedBudget(budgets[index], this.props.goBack)
           return;
         }
-      }
-      this.props.addBudget({month, amount}, this.props.goBack);
-   }
+    }
+    this.props.addBudget({month, amount}, this.props.goBack);
   }
 
   validateMonth (month) {
