@@ -15,14 +15,13 @@ export default class AddBudgetPage extends React.Component {
     const month = this.refs.month.getValue()
     const amount = this.refs.amount.getValue()
     if(this.validate(month,amount)){
-    	console.log(this.validate(month,amount))
-    	//this.props.addBudget({month, amount}, this.props.goBack)
+    	this.props.addBudget({month, amount}, this.props.goBack)
     }
      
   }
   validate(month,amount){
   	
-  	var reg = /^((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/;
+  	var reg = /^[1-9](\d{3})-(0\d{1}|1[0-2])$/;
     if(!amount || amount == 0 ){
     	alert("amount输入不能为空或为0");
     	return false;
@@ -35,9 +34,9 @@ export default class AddBudgetPage extends React.Component {
     } else if(!reg.test(month)){
     	alert("日期输入有误,参考格式:yyyy-mm");
     	return false;
-    }else{
-    	return true;
     }
+    return true;
+    
   	
   	
   }
