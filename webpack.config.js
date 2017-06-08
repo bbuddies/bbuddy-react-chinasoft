@@ -48,7 +48,6 @@ module.exports = function (dev) {
         template: './www/index.html',
         inject: 'body'
       }),
-      new webpack.optimize.OccurrenceOrderPlugin()
     ],
     module: {
       loaders: [{
@@ -80,12 +79,12 @@ module.exports = function (dev) {
         }
       })
     )
-    config.plugins.push(new webpack.optimize.DedupePlugin())
     config.plugins.push(
-      new webpack.optimize.UglifyJsPlugin({
-        compress: {
-          warnings: false
-        }
+      new webpack.optimize.UglifyJsPlugin()
+    )
+    config.plugins.push(
+      new webpack.LoaderOptionsPlugin({
+        minimize: true
       })
     )
   }
