@@ -31,6 +31,7 @@ export default store => next => action => {
       next(CommonActions.hideIndicator())
       return next(actionWith({ data, type: successType }))
     },
+
     ({status, data}) => {
       if (status == 401) {
         next(push('/signin'))

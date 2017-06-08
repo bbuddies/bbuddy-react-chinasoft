@@ -18,6 +18,7 @@ export default class Sidebar extends React.Component {
       <SelectableList className={this.props.className} value={this.props.location.pathname} onChange={(event, value) => this.goTo(value)}>
         <ListItem value="/dashboard" primaryText="Dashboard" leftAvatar={<DashboardIcon />} />
         <ListItem value="/accounts" id="Accounts" primaryText="Accounts" leftAvatar={<AccountIcon />}/>
+        <ListItem value="/budgets" id="Budgets" primaryText="Budgets" leftAvatar={<AccountIcon />}/>
       </SelectableList>
     )
   }
