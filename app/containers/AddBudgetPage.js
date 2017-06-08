@@ -58,12 +58,9 @@ export default class AddBudgetPage extends React.Component {
   }
 
   save() {
-    const {form:{month, amount}} = this.state
-    if (month.isValid && amount.isValid) {
-      this.props.addBudget({month, amount}, this.props.goBack)
-    } else {
-      alert('数据不对')
-    }
+    const month = this.refs.month.getValue()
+    const amount = this.refs.amount.getValue()
+    this.props.addBudget({month, amount}, this.props.goBack)
   }
 
   render() {
@@ -72,14 +69,14 @@ export default class AddBudgetPage extends React.Component {
       <Card>
         <CardTitle title='Add Budget'/>
         <CardText>
-          <TextField fullWidth={true} id="month" ref="month" hintText="Month" floatingLabelText="Month" autoFocus
+          <TextField fullWidth={true} id="month" ref="month" hintText="e.g. yyyy-mm" floatingLabelText="Month" autoFocus
                      onChange={(e) => this.handleValueChange("month", e.target.value)}/>
           <TextField fullWidth={true} id="amount" ref="amount" hintText="Amount" floatingLabelText="Amount"
                      onChange={(e) => this.handleValueChange("amount", e.target.value)}/>
         </CardText>
         <CardActions>
           <RaisedButton
-            label='Save'
+            label='Save' disabled={!(this.state.form.amount.isValid && this.state.form.month.isValid)}
             primary={true}
             onTouchTap={() => this.save()}/>
         </CardActions>
