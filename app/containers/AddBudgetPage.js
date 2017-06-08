@@ -22,8 +22,8 @@ export default class AddBudgetPage extends React.Component {
   validate(month,amount){
   	
   	var reg = /^[1-9](\d{3})-(0[1-9]|1[0-2])$/;
-    if(!amount || amount == 0 ){
-    	alert("amount输入不能为空或为0");
+    if(!amount || amount <= 0 ){
+    	alert("amount输入不能为空且不能小于0");
     	return false;
     }else if(isNaN(Number(amount))){
     	alert("amount必须是数字");
