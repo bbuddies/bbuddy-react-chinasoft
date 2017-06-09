@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import merge from 'lodash/merge'
 import values from 'lodash/values'
-import findIndex from 'lodash/findIndex'
+import find from 'lodash/find'
 import moment from 'moment'
 import * as NavigationActions from '../actions/navigation'
 import * as BudgetActions from '../actions/budget'
@@ -24,12 +24,12 @@ export default class BudgetsPage extends React.Component {
     let {total} = this.state;
     let startDay = this.refs.startDay.value
     let endDay = this.refs.endDay.value
+
     var result = 0;
     if(moment(startDay).isSame(endDay, 'month')){
-       let targetMonth = findIndex(this.props.budgets,'month',startDay.substring(0,startDay.lastIndexOf('-')))
-       if(targetMonth && targetMonth.amount){
-         result = targetMonth.amount
-       }
+       let targetMonth = find(this.props.budgets, budget => moment(startDay, 'YYYY-MM-DD').isSame(moment(budget.month, 'YYYY-MM'), 'month'))
+       let daysInMonth = moment(startDay, "YYYY-MM").daysInMonth()
+       result = targetMonth.amount*(moment(endDay).date()-moment(startDay).date()+1)/daysInMonth
     }else{
       this.props.budgets.forEach((budget, index) =>{
          let daysInMonth = moment(budget.month, "YYYY-MM").daysInMonth()
