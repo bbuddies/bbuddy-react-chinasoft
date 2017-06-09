@@ -20,9 +20,6 @@ import merge from 'lodash/merge'
 import values from 'lodash/values'
 import * as NavigationActions from '../actions/navigation'
 import * as BudgetActions from '../actions/budget'
-import moment from 'moment'
-
-const DATE_FORMAT = 'YYYY-MM'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class BudgetsPage extends React.Component {
@@ -41,51 +38,25 @@ export default class BudgetsPage extends React.Component {
     const {budgets} = this.props
     const date1 = this.refs.date1.getDate()
     const date2 = this.refs.date2.getDate()
-    let msg = 'Please select "Start Date" and "End Date".'
-    let budget = {}, months = [], tempDate = moment(date1).set('date', 1), total = 0
 
     if (date1 && date2) {
       if (date2 < date1) {
-        msg = '"End Date" should be later than "Start Date".'
+        this.setState({
+          msg: '"End Date" should be later than "Start Date".'
+        })
       } else {
-        for (let v of budgets) {
-          if (moment(v.month, DATE_FORMAT, true).isValid()) {
-            budget[v.month] = v.amount
-          }
-        }
-        console.info(budget)
-
-        while (tempDate <= date2) {
-          months.push(moment(tempDate).format(DATE_FORMAT))
-          tempDate = moment(tempDate).add(1, 'months')
-        }
-        console.info(months)
-
-        if (months.length === 1) {
-          total = (budget[moment(date1).format(DATE_FORMAT)] || 0) / moment(date1).daysInMonth()
-            * (moment(date2).date() - moment(date1).date() + 1)
-        } else {
-          months.forEach((v, i) => {
-            const currentMonthBudget = budget[v] || 0
-            if (i === 0) {
-              total += currentMonthBudget / moment(date1).daysInMonth()
-                * (moment(date1).daysInMonth() - moment(date1).date() + 1)
-            } else if (i === months.length - 1) {
-              total += currentMonthBudget / moment(date2).daysInMonth()
-                * moment(date2).date()
-            } else {
-              total += currentMonthBudget
-            }
+        let msg = 'The total amount is: '
+        this.props.calc({budgets, date1, date2, msg}, (text) => {
+          this.setState({
+            msg: text
           })
-        }
-
-        msg = 'The amount is: ' + total
+        })
       }
+    } else {
+      this.setState({
+        msg: 'Please select "Start Date" and "End Date".'
+      })
     }
-
-    this.setState({
-      msg
-    })
   }
 
 
@@ -103,7 +74,7 @@ export default class BudgetsPage extends React.Component {
           floatingLabelText="End Date"
         />
         <RaisedButton label='Check' primary={true} onTouchTap={() => this.check()}/>
-        <TextField fullWidth={true} value={this.state.msg} disabled={true}/>
+        <TextField id="msg" fullWidth={true} value={this.state.msg} disabled={true}/>
         <CardText>
           <Table height='500px' fixedHeader={true}>
             <TableHeader>
