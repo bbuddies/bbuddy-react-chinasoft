@@ -20,31 +20,12 @@ export default class BudgetsPage extends React.Component {
   componentWillMount(){
     this.props.loadBudgets()
   }
+
   caculate(){
-    let {total} = this.state;
     let startDay = this.refs.startDay.value
     let endDay = this.refs.endDay.value
+    let result = this.props.caculate(this.props.budgets,startDay,endDay,(result)=>{this.setState({total:result})})
 
-    var result = 0;
-    if(moment(startDay).isSame(endDay, 'month')){
-       let targetMonth = find(this.props.budgets, budget => moment(startDay, 'YYYY-MM-DD').isSame(moment(budget.month, 'YYYY-MM'), 'month'))
-       let daysInMonth = moment(startDay, "YYYY-MM").daysInMonth()
-       result = targetMonth.amount*(moment(endDay).date()-moment(startDay).date()+1)/daysInMonth
-    }else{
-      this.props.budgets.forEach((budget, index) =>{
-         let daysInMonth = moment(budget.month, "YYYY-MM").daysInMonth()
-         if(moment(budget.month).isSame(startDay, 'month') ){
-           let daysLeft = daysInMonth - moment(startDay).date()+1
-           result += budget.amount*(daysLeft/daysInMonth)
-         }else if(moment(budget.month).isSame(endDay, 'month')){
-           let daysLeft = moment(endDay).date()
-           result += budget.amount*(daysLeft/daysInMonth)
-         }else if(moment(budget.month).isBetween(startDay,endDay)){
-           result += budget.amount
-         }
-      })
-    }
-    this.setState({total:result})
   }
   render() {
     const {goToAddBudget, budgets} = this.props
