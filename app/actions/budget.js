@@ -1,6 +1,5 @@
 import {fetchBudgets, createBudget, ADD_BUDGET_SUCCESS, UPDATE_BUDGET_SUCCESS, updateBudget} from './budget.generated'
-import values from 'lodash/values'
-import find from 'lodash/find'
+import _ from 'lodash'
 import moment from 'moment'
 
 export function loadBudgets() {
@@ -9,29 +8,31 @@ export function loadBudgets() {
   }
 }
 
+const monthOfBudget = budget => moment(budget.month, 'YYYY-MM')
+
+const dailyAmountOfBudget = budget => budget.amount / dayCountOfBudget(budget)
+
+const dayCountOfBudget = budget => monthOfBudget(budget).daysInMonth()
+
+const overlappingDayCountOf = (anotherPeriod, period) => {
+  const startOfOverlapping = period.start.isAfter(anotherPeriod.start) ? period.start : anotherPeriod.start;
+  const endOfOverlapping = period.end.isBefore(anotherPeriod.end) ? period.end : anotherPeriod.end;
+  return startOfOverlapping.isAfter(endOfOverlapping) ? 0 : endOfOverlapping.date() - startOfOverlapping.date() + 1
+}
+
+const periodOfBudget = budget => ({
+  start: monthOfBudget(budget).startOf('month'),
+  end: monthOfBudget(budget).endOf('month')
+})
+
+const amountOfOverlapping = (budget, period) => dailyAmountOfBudget(budget) * overlappingDayCountOf(periodOfBudget(budget), period)
+
+const parseDay = dayStr => moment(dayStr, 'YYYY-MM-DD')
+
 export const caculate = (budgets, startDay, endDay, success) => {
-  var result = 0;
-  if (moment(startDay).isSame(endDay, 'month')) {
-    let targetMonth = find(budgets, budget => moment(startDay, 'YYYY-MM-DD').isSame(moment(budget.month, 'YYYY-MM'), 'month'))
-    if (targetMonth) {
-      let daysInMonth = moment(startDay, "YYYY-MM").daysInMonth()
-      result = targetMonth.amount * (moment(endDay).date() - moment(startDay).date() + 1) / daysInMonth
-    }
-  } else {
-    budgets.forEach((budget, index) => {
-      let daysInMonth = moment(budget.month, "YYYY-MM").daysInMonth()
-      if (moment(budget.month).isSame(startDay, 'month')) {
-        let daysLeft = daysInMonth - moment(startDay).date() + 1
-        result += budget.amount * (daysLeft / daysInMonth)
-      } else if (moment(budget.month).isSame(endDay, 'month')) {
-        let daysLeft = moment(endDay).date()
-        result += budget.amount * (daysLeft / daysInMonth)
-      } else if (moment(budget.month).isBetween(startDay, endDay)) {
-        result += budget.amount
-      }
-    })
-  }
-  success(result);
+  success(_(budgets)
+    .sumBy(budget => amountOfOverlapping(budget,
+      {start: parseDay(startDay), end: parseDay(endDay)})))
 }
 
 export const addBudget = (budget, success) => {

@@ -14,9 +14,15 @@ describe('Total amount', () => {
     })
   })
 
+  it('start and end is the first day of month', () => {
+    caculate([{month: '2017-05', amount: 310}], '2017-05-01', '2017-05-01', total =>{
+      total.should.be.eql(10)
+    })
+  })
+
   it('start and end all in a budget month', () => {
-    caculate([{month: '2017-05', amount: 310}], '2017-05-01', '2017-05-10', total =>{
-      total.should.be.eql(100)
+    caculate([{month: '2017-05', amount: 310}], '2017-05-02', '2017-05-10', total =>{
+      total.should.be.eql(90)
     })
   })
 
@@ -52,4 +58,9 @@ describe('Total amount', () => {
       })
   })
 
+  // it('xxxx', () => {
+  //   caculate([{month: '2017-05', amount: 310}], '2017-05-20', '2017-01-15', total =>{
+  //     total.should.be.eql(0)
+  //   })
+  // })
 })
