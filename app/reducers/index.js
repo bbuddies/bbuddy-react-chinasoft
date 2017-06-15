@@ -5,7 +5,6 @@ import notification from './notification'
 import entities from './entities'
 import indicator from './indicator'
 import authentication from './authentication'
-import counter from './counter'
 
 const rootReducer = combineReducers({
   authentication,
@@ -13,7 +12,6 @@ const rootReducer = combineReducers({
   notification,
   indicator,
   entities,
-  counter,
   routing
 })
 
